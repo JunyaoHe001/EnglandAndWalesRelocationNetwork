@@ -1,0 +1,98 @@
+name: Deploy England and Wales Migration Atlas
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy-england-wales-atlas
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out deployment configuration
+        uses: actions/checkout@v4
+
+      - name: Download validated compact release bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://drive.usercontent.google.com/download?id=10Prb2vGnSAHCaQ8AuTWgAHGfM8d1XSPW&export=download&confirm=t"
+          curl --fail --location --retry 5 --retry-delay 3 --output /tmp/atlas.zip "$URL"
+          echo "bfe77361dcbe0af79900bbf71047bccecd8709f12bf2ffc563b7f6d2aada2e94  /tmp/atlas.zip" | sha256sum --check --strict
+
+      - name: Extract and validate public site
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/atlas-site
+          mkdir -p /tmp/atlas-site
+          unzip -q /tmp/atlas.zip -d /tmp/atlas-site
+
+          required=(
+            index.html
+            assets/app.js
+            assets/styles.css
+            data/manifest.json
+            data/package-manifest.json
+            data/network_summary.json
+            docs/data-and-methods.html
+            docs/validation-results.json
+            .nojekyll
+          )
+          for path in "${required[@]}"; do
+            test -e "/tmp/atlas-site/$path"
+          done
+
+          node --check /tmp/atlas-site/assets/app.js
+
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+
+          root = Path('/tmp/atlas-site')
+          manifest = json.loads((root / 'data/manifest.json').read_text(encoding='utf-8'))
+          package = json.loads((root / 'data/package-manifest.json').read_text(encoding='utf-8'))
+          validation = json.loads((root / 'docs/validation-results.json').read_text(encoding='utf-8'))
+
+          assert manifest['available_years'] == list(range(2012, 2026))
+          assert manifest['geography_count'] == 318
+          assert manifest['layer_count'] == 70
+          assert len(manifest['age_groups']) == 5
+          assert package['format'] == 'EWP1'
+          assert package['network_payload'] == 'gzip-EWR2-varint'
+          assert package['part_count'] == len(package['parts']) == 34
+          assert validation['status'] == 'pass'
+          assert validation['compact_package']['status'] == 'pass'
+          assert validation['compact_package']['all_70_layers_reconstructed'] is True
+
+          encoded = ''.join((root / part).read_text(encoding='ascii') for part in package['parts'])
+          import base64
+          payload = base64.b64decode(encoded, validate=True)
+          assert len(payload) == package['package_bytes']
+          assert hashlib.sha256(payload).hexdigest() == package['sha256']
+          assert payload[:4] == b'EWP1'
+          print('Public atlas bundle validation passed.')
+          PY
+
+      - name: Publish clean site to gh-pages
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd /tmp/atlas-site
+          rm -rf .git .github
+          git init -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Publish England and Wales migration atlas v1.0.0"
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push --force origin gh-pages
