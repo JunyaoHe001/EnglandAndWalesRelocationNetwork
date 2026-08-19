@@ -1,0 +1,1 @@
+Drive release permission verified as public reader on 2026-08-20. Triggering validated atlas deployment.
