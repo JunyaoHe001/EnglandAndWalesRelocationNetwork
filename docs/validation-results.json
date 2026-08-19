@@ -1,0 +1,612 @@
+{
+  "status": "pass",
+  "source_pipeline_version": "2026-08-19-v3",
+  "years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "age_groups": [
+    "teenagers_15_20",
+    "young_adults_20_40",
+    "prime_working_age_30_50",
+    "older_working_age_50_65",
+    "elderly_65_plus"
+  ],
+  "lad_count": 318,
+  "layer_count": 70,
+  "checks": {
+    "all_318_lads_retained": true,
+    "all_70_layers_created": true,
+    "all_layer_node_counts_318": true,
+    "all_exported_edge_counts_at_most_4000": true,
+    "all_exported_flow_shares_valid": true,
+    "record_level_data_excluded": true,
+    "local_paths_excluded": true,
+    "source_workbook_names_excluded": true
+  },
+  "layers": [
+    {
+      "year": 2012,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 288878.6448,
+      "exported_edge_flow_share": 0.5316940696891554
+    },
+    {
+      "year": 2012,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1607603.7876000002,
+      "exported_edge_flow_share": 0.5666011397994045
+    },
+    {
+      "year": 2012,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 868860.5166,
+      "exported_edge_flow_share": 0.6353482698928296
+    },
+    {
+      "year": 2012,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 250128.08010000002,
+      "exported_edge_flow_share": 0.6089688712243068
+    },
+    {
+      "year": 2012,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 166970.91019999998,
+      "exported_edge_flow_share": 0.618701177206615
+    },
+    {
+      "year": 2013,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 274617.3164,
+      "exported_edge_flow_share": 0.5381384554961735
+    },
+    {
+      "year": 2013,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1593854.6630999998,
+      "exported_edge_flow_share": 0.5625056175173668
+    },
+    {
+      "year": 2013,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 856184.4253000001,
+      "exported_edge_flow_share": 0.6342619056749618
+    },
+    {
+      "year": 2013,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 252187.35049999997,
+      "exported_edge_flow_share": 0.605255824677059
+    },
+    {
+      "year": 2013,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 174497.05820000003,
+      "exported_edge_flow_share": 0.6092757052565599
+    },
+    {
+      "year": 2014,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 285878.353,
+      "exported_edge_flow_share": 0.547786513937276
+    },
+    {
+      "year": 2014,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1689642.3804,
+      "exported_edge_flow_share": 0.5630818249094625
+    },
+    {
+      "year": 2014,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 946803.3716999999,
+      "exported_edge_flow_share": 0.6335684493000208
+    },
+    {
+      "year": 2014,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 300253.08030000003,
+      "exported_edge_flow_share": 0.6011464685713
+    },
+    {
+      "year": 2014,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 207479.4463,
+      "exported_edge_flow_share": 0.6104117331066928
+    },
+    {
+      "year": 2015,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 284460.4956,
+      "exported_edge_flow_share": 0.5448576044736385
+    },
+    {
+      "year": 2015,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1717181.535,
+      "exported_edge_flow_share": 0.5537910340970444
+    },
+    {
+      "year": 2015,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 927276.7976000002,
+      "exported_edge_flow_share": 0.6293212983548937
+    },
+    {
+      "year": 2015,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 295740.7842,
+      "exported_edge_flow_share": 0.5968797349932774
+    },
+    {
+      "year": 2015,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 202822.4913,
+      "exported_edge_flow_share": 0.6111860795390989
+    },
+    {
+      "year": 2016,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 285956.33670000004,
+      "exported_edge_flow_share": 0.5427699364565262
+    },
+    {
+      "year": 2016,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1713858.4488000001,
+      "exported_edge_flow_share": 0.5498102643539624
+    },
+    {
+      "year": 2016,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 917461.3992,
+      "exported_edge_flow_share": 0.6277102778407553
+    },
+    {
+      "year": 2016,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 302665.7948,
+      "exported_edge_flow_share": 0.5940388414845748
+    },
+    {
+      "year": 2016,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 205101.81750000003,
+      "exported_edge_flow_share": 0.6109069223630843
+    },
+    {
+      "year": 2017,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 293243.7758,
+      "exported_edge_flow_share": 0.5473916415176646
+    },
+    {
+      "year": 2017,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1933747.2606,
+      "exported_edge_flow_share": 0.5518882012372532
+    },
+    {
+      "year": 2017,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1031171.375,
+      "exported_edge_flow_share": 0.6335179878320419
+    },
+    {
+      "year": 2017,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 347912.66329999996,
+      "exported_edge_flow_share": 0.595590009384979
+    },
+    {
+      "year": 2017,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 237304.3532,
+      "exported_edge_flow_share": 0.6033567824157386
+    },
+    {
+      "year": 2018,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 292545.15450000006,
+      "exported_edge_flow_share": 0.559322595103861
+    },
+    {
+      "year": 2018,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1933079.4608,
+      "exported_edge_flow_share": 0.5518744794683714
+    },
+    {
+      "year": 2018,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1015654.9537,
+      "exported_edge_flow_share": 0.6332435027831047
+    },
+    {
+      "year": 2018,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 346439.3771,
+      "exported_edge_flow_share": 0.5962633091225472
+    },
+    {
+      "year": 2018,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 233669.93170000002,
+      "exported_edge_flow_share": 0.6042380248618011
+    },
+    {
+      "year": 2019,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 291340.9346,
+      "exported_edge_flow_share": 0.5629228289707011
+    },
+    {
+      "year": 2019,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 2006025.2517,
+      "exported_edge_flow_share": 0.5561384312358805
+    },
+    {
+      "year": 2019,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1051879.1668,
+      "exported_edge_flow_share": 0.6373448302427202
+    },
+    {
+      "year": 2019,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 357276.85970000003,
+      "exported_edge_flow_share": 0.6017312811149296
+    },
+    {
+      "year": 2019,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 237297.36119999998,
+      "exported_edge_flow_share": 0.6102150738960682
+    },
+    {
+      "year": 2020,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 283206.55679999996,
+      "exported_edge_flow_share": 0.5720756751914299
+    },
+    {
+      "year": 2020,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1834383.4122,
+      "exported_edge_flow_share": 0.5493218835267878
+    },
+    {
+      "year": 2020,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 928245.4589,
+      "exported_edge_flow_share": 0.6335313365248072
+    },
+    {
+      "year": 2020,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 314290.49090000003,
+      "exported_edge_flow_share": 0.5994807461736029
+    },
+    {
+      "year": 2020,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 209356.49379999997,
+      "exported_edge_flow_share": 0.6127238437731232
+    },
+    {
+      "year": 2021,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 286725.5154,
+      "exported_edge_flow_share": 0.581702030484867
+    },
+    {
+      "year": 2021,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 2193816.8258999996,
+      "exported_edge_flow_share": 0.5604069760909204
+    },
+    {
+      "year": 2021,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1219523.6419000002,
+      "exported_edge_flow_share": 0.642099844886984
+    },
+    {
+      "year": 2021,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 417867.4117,
+      "exported_edge_flow_share": 0.6034701932703981
+    },
+    {
+      "year": 2021,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 262075.70339999997,
+      "exported_edge_flow_share": 0.5973802831353958
+    },
+    {
+      "year": 2022,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 315545.1428,
+      "exported_edge_flow_share": 0.5698134618854288
+    },
+    {
+      "year": 2022,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 2012630.3806,
+      "exported_edge_flow_share": 0.5582398219414019
+    },
+    {
+      "year": 2022,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1082749.7136000001,
+      "exported_edge_flow_share": 0.6374560100368517
+    },
+    {
+      "year": 2022,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 380591.7178,
+      "exported_edge_flow_share": 0.6112253972437863
+    },
+    {
+      "year": 2022,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 264226.47010000004,
+      "exported_edge_flow_share": 0.6145317505038266
+    },
+    {
+      "year": 2023,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 312277.2366,
+      "exported_edge_flow_share": 0.5605287622171817
+    },
+    {
+      "year": 2023,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 2014336.2607,
+      "exported_edge_flow_share": 0.557361192371053
+    },
+    {
+      "year": 2023,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1089820.8817999999,
+      "exported_edge_flow_share": 0.6313629923878379
+    },
+    {
+      "year": 2023,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 365967.46640000003,
+      "exported_edge_flow_share": 0.6129428211381578
+    },
+    {
+      "year": 2023,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 250882.4599,
+      "exported_edge_flow_share": 0.6282912666067972
+    },
+    {
+      "year": 2024,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 309489.2797,
+      "exported_edge_flow_share": 0.5649657580045736
+    },
+    {
+      "year": 2024,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 2106952.3828000003,
+      "exported_edge_flow_share": 0.5543483677822014
+    },
+    {
+      "year": 2024,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1145169.5679,
+      "exported_edge_flow_share": 0.6266378650071357
+    },
+    {
+      "year": 2024,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 357512.00059999997,
+      "exported_edge_flow_share": 0.6169711353180238
+    },
+    {
+      "year": 2024,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 238866.21140000003,
+      "exported_edge_flow_share": 0.6344084582404022
+    },
+    {
+      "year": 2025,
+      "age_group": "teenagers_15_20",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 314360.66099999996,
+      "exported_edge_flow_share": 0.5752882575215097
+    },
+    {
+      "year": 2025,
+      "age_group": "young_adults_20_40",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 2172981.7076999997,
+      "exported_edge_flow_share": 0.5604315004054925
+    },
+    {
+      "year": 2025,
+      "age_group": "prime_working_age_30_50",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 1203703.5007,
+      "exported_edge_flow_share": 0.6330462358519915
+    },
+    {
+      "year": 2025,
+      "age_group": "older_working_age_50_65",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 367278.9007,
+      "exported_edge_flow_share": 0.6249833215643799
+    },
+    {
+      "year": 2025,
+      "age_group": "elderly_65_plus",
+      "nodes": 318,
+      "edges_exported": 4000,
+      "total_directed_moves": 244884.12970000002,
+      "exported_edge_flow_share": 0.6352612588270966
+    }
+  ],
+  "compact_package": {
+    "status": "pass",
+    "format": "EWP1/EWR2-varint",
+    "part_count": 34,
+    "package_bytes": 2018305,
+    "max_node_float32_error": 0.05000000000291038,
+    "max_edge_flow_float32_error": 0.0500000000001819,
+    "max_distance_quantisation_error_km": 0.05000000000001137,
+    "source_target_rank_exact": true,
+    "all_70_layers_reconstructed": true
+  }
+}

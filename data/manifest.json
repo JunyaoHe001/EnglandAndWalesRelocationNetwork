@@ -1,0 +1,237 @@
+{
+  "schema_version": "2.0.0",
+  "pipeline_version": "2026-08-19-v3",
+  "title": "Age-Specific Internal Migration Networks in England and Wales",
+  "short_title": "England & Wales Migration Networks",
+  "period_definition": "Year ending June",
+  "geography": "ONS Local Authority Districts, December 2023",
+  "available_years": [
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "default_year": 2025,
+  "default_age_group": "young_adults_20_40",
+  "age_groups": [
+    {
+      "key": "teenagers_15_20",
+      "label": "Teenagers (15–20)",
+      "label_zh": "青少年（15–20）",
+      "min_age": 15,
+      "max_age_exclusive": 20
+    },
+    {
+      "key": "young_adults_20_40",
+      "label": "Young adults (20–40)",
+      "label_zh": "青年人（20–40）",
+      "min_age": 20,
+      "max_age_exclusive": 40
+    },
+    {
+      "key": "prime_working_age_30_50",
+      "label": "Prime working age (30–50)",
+      "label_zh": "核心劳动年龄（30–50）",
+      "min_age": 30,
+      "max_age_exclusive": 50
+    },
+    {
+      "key": "older_working_age_50_65",
+      "label": "Older working age (50–65)",
+      "label_zh": "较高劳动年龄（50–65）",
+      "min_age": 50,
+      "max_age_exclusive": 65
+    },
+    {
+      "key": "elderly_65_plus",
+      "label": "Elderly (65+)",
+      "label_zh": "老年人（65+）",
+      "min_age": 65,
+      "max_age_exclusive": null
+    }
+  ],
+  "age_group_note": "Ranges are half-open at the upper bound. The 20–40 and 30–50 layers overlap at ages 30–39.",
+  "geography_count": 318,
+  "layer_count": 70,
+  "files": {
+    "map": "data/map.json.gz",
+    "network_summary": "data/network_summary.json",
+    "year_template": "data/years/{year}.json.gz",
+    "timeseries_template": "data/timeseries/{age_group}.json.gz"
+  },
+  "schemas": {
+    "region_fields": [
+      "index",
+      "id",
+      "name",
+      "x",
+      "y",
+      "path",
+      "nation"
+    ],
+    "node_fields": [
+      "index",
+      "inflow",
+      "outflow",
+      "total_flow",
+      "net_flow",
+      "in_degree",
+      "out_degree",
+      "balance_index",
+      "mean_in_distance_km",
+      "mean_out_distance_km",
+      "activity_share"
+    ],
+    "edge_fields": [
+      "source_index",
+      "target_index",
+      "flow",
+      "distance_km",
+      "rank",
+      "cumulative_flow_share"
+    ]
+  },
+  "front_end_defaults": {
+    "visible_edges": 500,
+    "maximum_exported_edges": 4000,
+    "node_size_metric": "total_flow",
+    "node_colour_metric": "balance_index",
+    "edge_width_metric": "flow",
+    "show_edges": true,
+    "show_nodes": true,
+    "show_labels": false
+  },
+  "scales": {
+    "node_size": {
+      "metric": "total_flow",
+      "transform": "sqrt",
+      "mode": "per_age_group_across_all_years",
+      "domains": {
+        "teenagers_15_20": {
+          "min": 24.0,
+          "p50": 1254.5142,
+          "p95": 5117.3113399999975,
+          "p98": 7977.07213799994,
+          "max": 15127.321499999998
+        },
+        "young_adults_20_40": {
+          "min": 217.3268,
+          "p50": 7657.7723,
+          "p95": 35661.830375,
+          "p98": 51115.703831999956,
+          "max": 86481.37109999999
+        },
+        "prime_working_age_30_50": {
+          "min": 85.0,
+          "p50": 4540.40825,
+          "p95": 19006.984669999983,
+          "p98": 24110.126942,
+          "max": 42138.3471
+        },
+        "older_working_age_50_65": {
+          "min": 18.089399999999998,
+          "p50": 1791.6293500000002,
+          "p95": 4469.187445,
+          "p98": 5707.477859999993,
+          "max": 10053.0687
+        },
+        "elderly_65_plus": {
+          "min": 13.0002,
+          "p50": 1245.8467,
+          "p95": 2756.266359999998,
+          "p98": 4088.453087999997,
+          "max": 7049.3595000000005
+        }
+      }
+    },
+    "node_colour": {
+      "recommended_metric": "balance_index",
+      "recommended_domain": [
+        -0.46959300436811174,
+        0.46959300436811174
+      ],
+      "midpoint": 0,
+      "palette": [
+        "#006837",
+        "#66bd63",
+        "#ffffbf",
+        "#f46d43",
+        "#a50026"
+      ],
+      "interpretation": {
+        "negative": "more outflow",
+        "zero": "balanced",
+        "positive": "more inflow"
+      },
+      "alternative_metric": "log_inflow_outflow_ratio",
+      "alternative_domain": [
+        -1.019096145895084,
+        1.019096145895084
+      ]
+    },
+    "edge_width": {
+      "metric": "flow",
+      "transform": "log1p",
+      "mode": "per_age_group_across_all_years",
+      "domains": {
+        "teenagers_15_20": {
+          "min": 15.7805,
+          "p50": 29.5097,
+          "p95": 103.55504999999992,
+          "p98": 146.47560399999998,
+          "max": 467.2282
+        },
+        "young_adults_20_40": {
+          "min": 71.341,
+          "p50": 159.48875,
+          "p95": 794.9301799999982,
+          "p98": 1252.1824519999975,
+          "max": 5698.7621
+        },
+        "prime_working_age_30_50": {
+          "min": 32.0538,
+          "p50": 87.896,
+          "p95": 527.5104699999989,
+          "p98": 852.946839999997,
+          "max": 3374.6494
+        },
+        "older_working_age_50_65": {
+          "min": 9.9762,
+          "p50": 28.06295,
+          "p95": 160.56696999999986,
+          "p98": 234.0811639999998,
+          "max": 953.5703
+        },
+        "elderly_65_plus": {
+          "min": 6.8023,
+          "p50": 18.6629,
+          "p95": 111.48042499999998,
+          "p98": 160.75688,
+          "max": 689.8361
+        }
+      }
+    }
+  },
+  "interpretation": {
+    "edge": "A directed edge represents estimated migration from an origin LAD to a destination LAD for the selected age group and year ending June.",
+    "balance_index": "Negative values indicate more outflow; positive values indicate more inflow.",
+    "coverage": "Each layer publishes the 4,000 strongest directed OD edges and reports the share of total flow they retain."
+  },
+  "privacy": {
+    "individual_records_published": false,
+    "record_level_data_published": false,
+    "aggregate_lad_estimates_only": true,
+    "source_workbook_filenames_published": false,
+    "local_paths_published": false
+  }
+}

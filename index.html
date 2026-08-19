@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Interactive atlas of age-specific inter-local-authority migration networks in England and Wales, 2012–2025." />
+  <title>Age-Specific Migration Networks · England and Wales</title>
+  <link rel="stylesheet" href="assets/styles.css?v=1.0.0" />
+</head>
+<body>
+  <div id="loadingOverlay" class="loading-overlay" role="status" aria-live="polite">
+    <div class="loading-card"><div class="spinner"></div><strong>Loading migration atlas</strong><span id="loadingMessage">Preparing the 2023 LAD map…</span></div>
+  </div>
+
+  <main class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <header class="project-header">
+        <div class="eyebrow">ONGOING RESEARCH · INTERACTIVE ATLAS</div>
+        <h1>Age-Specific Migration Networks</h1>
+        <p class="subtitle">England and Wales · Year ending June 2012–2025</p>
+        <p class="study-note">Inter-local-authority migration on a common December 2023 LAD geography.</p>
+      </header>
+
+      <section class="control-section">
+        <div class="section-heading">Time</div>
+        <div class="year-row">
+          <button id="prevYear" class="icon-button" aria-label="Previous year">‹</button>
+          <button id="playYear" class="icon-button play-button" aria-label="Play years">▶</button>
+          <button id="nextYear" class="icon-button" aria-label="Next year">›</button>
+          <div class="year-value" id="yearValue">2025</div>
+        </div>
+        <input id="yearSlider" type="range" min="2012" max="2025" value="2025" step="1" aria-label="Year ending June" />
+      </section>
+
+      <section class="control-section">
+        <div class="section-heading">Population layer</div>
+        <label class="field-label" for="ageGroupSelect">Age group</label>
+        <select id="ageGroupSelect" aria-label="Age group"></select>
+        <p class="micro-note">The 20–40 and 30–50 layers overlap at ages 30–39, following the source grouping.</p>
+      </section>
+
+      <section class="control-section">
+        <div class="section-heading">Map and network display</div>
+        <label class="field-label" for="colourMetric">LAD colour</label>
+        <select id="colourMetric">
+          <option value="balance_index">Migration balance index</option>
+          <option value="net_flow">Net migration</option>
+          <option value="total_flow">Total migration activity</option>
+          <option value="inflow">Inflow</option>
+          <option value="outflow">Outflow</option>
+        </select>
+
+        <label class="field-label" for="nodeSizeMetric">Node size</label>
+        <select id="nodeSizeMetric">
+          <option value="total_flow">Total migration activity</option>
+          <option value="inflow">Inflow</option>
+          <option value="outflow">Outflow</option>
+          <option value="uniform">Uniform</option>
+        </select>
+
+        <label class="field-label" for="edgeLimit">Strongest directed flows shown</label>
+        <select id="edgeLimit">
+          <option value="100">Top 100</option>
+          <option value="250">Top 250</option>
+          <option value="500" selected>Top 500</option>
+          <option value="1000">Top 1,000</option>
+          <option value="2000">Top 2,000</option>
+          <option value="2800">Top 2,800</option>
+          <option value="4000">Top 4,000</option>
+        </select>
+
+        <label class="field-label" for="edgeOpacity">Flow opacity</label>
+        <input id="edgeOpacity" type="range" min="10" max="80" value="42" step="1" />
+
+        <div class="toggle-grid">
+          <label class="toggle-row"><input id="showEdges" type="checkbox" checked /><span>Flows</span></label>
+          <label class="toggle-row"><input id="showNodes" type="checkbox" checked /><span>Nodes</span></label>
+          <label class="toggle-row"><input id="showLabels" type="checkbox" /><span>Leading LAD labels</span></label>
+        </div>
+      </section>
+
+      <section class="control-section">
+        <div class="section-heading">Find a local authority</div>
+        <div class="search-row">
+          <input id="searchInput" type="search" placeholder="LAD name or code" list="regionOptions" autocomplete="off" />
+          <datalist id="regionOptions"></datalist>
+          <button id="searchButton" class="small-button">Find</button>
+        </div>
+        <div class="button-row">
+          <button id="fitButton" class="secondary-button">Fit England & Wales</button>
+          <button id="clearButton" class="secondary-button">Clear focus</button>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Current network summary">
+        <div class="stat"><span class="stat-label">Total moves</span><strong id="statMoves">—</strong></div>
+        <div class="stat"><span class="stat-label">Visible flows</span><strong id="statEdges">—</strong></div>
+        <div class="stat"><span class="stat-label">Mean distance</span><strong id="statDistance">—</strong></div>
+        <div class="stat"><span class="stat-label">Reciprocity</span><strong id="statReciprocity">—</strong></div>
+        <div class="stat"><span class="stat-label">Destination Gini</span><strong id="statGini">—</strong></div>
+        <div class="stat"><span class="stat-label">Published flow share</span><strong id="statCoverage">—</strong></div>
+      </section>
+
+      <section class="selected-card" id="selectedCard" hidden>
+        <div class="section-heading">Selected LAD</div>
+        <div class="selected-heading-row"><h2 id="selectedName">—</h2><span id="selectedCode">—</span></div>
+        <div class="selected-metrics">
+          <div><span>Inflow</span><strong id="selInflow">—</strong></div>
+          <div><span>Outflow</span><strong id="selOutflow">—</strong></div>
+          <div><span>Net flow</span><strong id="selNet">—</strong></div>
+          <div><span>Balance index</span><strong id="selBalance">—</strong></div>
+          <div><span>In partners</span><strong id="selInDegree">—</strong></div>
+          <div><span>Out partners</span><strong id="selOutDegree">—</strong></div>
+        </div>
+
+        <label class="field-label" for="trendMetric">2012–2025 LAD trend</label>
+        <select id="trendMetric">
+          <option value="inflow_outflow">Inflow and outflow</option>
+          <option value="net_flow">Net migration</option>
+          <option value="total_flow">Total activity</option>
+          <option value="balance_index">Balance index</option>
+        </select>
+        <div class="trend-chart-wrap"><svg id="trendChart" viewBox="0 0 300 138" role="img" aria-label="Selected LAD time series"></svg></div>
+
+        <div class="partner-columns">
+          <div><div class="partner-title inbound">Largest published inflows</div><ol id="inboundList" class="partner-list"></ol></div>
+          <div><div class="partner-title outbound">Largest published outflows</div><ol id="outboundList" class="partner-list"></ol></div>
+        </div>
+      </section>
+
+      <footer class="sidebar-footer">
+        <p><strong>Interpretation.</strong> Curves are directed origin-to-destination flows. Hovering a curve reveals its direction; selecting an LAD distinguishes published inflows and outflows.</p>
+        <p><strong>Coverage.</strong> Each layer displays a user-selected subset of the 4,000 strongest directed flows. Summary statistics refer to the complete layer unless labelled otherwise.</p>
+        <p><a href="docs/data-and-methods.html">Data, methods and public-data boundary</a></p>
+      </footer>
+    </aside>
+
+    <section class="map-panel">
+      <div class="map-toolbar">
+        <div>
+          <span class="toolbar-kicker">INTER-LOCAL-AUTHORITY MIGRATION NETWORK</span>
+          <div class="toolbar-title"><span id="toolbarGroup">Young adults (20–40)</span><span class="toolbar-dot">·</span><span id="toolbarYear">2025</span></div>
+        </div>
+        <div class="toolbar-note" id="toolbarNote">Top 500 directed flows</div>
+      </div>
+
+      <svg id="mapSvg" class="map-svg" role="img" aria-label="Map of age-specific migration networks across England and Wales">
+        <defs>
+          <marker id="arrowDefault" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#243b5b" /></marker>
+          <marker id="arrowIn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#227f91" /></marker>
+          <marker id="arrowOut" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c35e3f" /></marker>
+        </defs>
+        <rect id="mapBackground" class="map-background"></rect>
+        <g id="regionLayer"></g>
+        <g id="edgeLayer"></g>
+        <g id="nodeLayer"></g>
+        <g id="labelLayer"></g>
+      </svg>
+
+      <div class="legend" id="legend">
+        <div class="legend-title" id="legendTitle">Migration balance index</div>
+        <div class="legend-scale" id="legendScale"></div>
+        <div class="legend-values"><span id="legendLow">More outflow</span><span id="legendMid">Balanced</span><span id="legendHigh">More inflow</span></div>
+      </div>
+
+      <div class="direction-key" id="directionKey" hidden><span><i class="key-in"></i>Inflow to selected LAD</span><span><i class="key-out"></i>Outflow from selected LAD</span></div>
+      <div class="tooltip" id="tooltip" hidden></div>
+      <div class="map-help">Scroll to zoom · drag to pan · click a LAD or node to inspect its network</div>
+    </section>
+  </main>
+
+  <script src="assets/app.js?v=1.0.0"></script>
+</body>
+</html>
