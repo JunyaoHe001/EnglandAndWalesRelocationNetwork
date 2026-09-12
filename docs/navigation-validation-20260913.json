@@ -1,0 +1,18 @@
+{
+  "change": "Remove study-area zoom-out restriction and correct SVG pan/zoom coordinates",
+  "data_files_modified": false,
+  "browser_test": {
+    "environment": "Headless Chromium, published public data, synthetic local tile responses and storage fixture; no live tile-service rendering claim",
+    "region_count": 318,
+    "initial_visible_edges": 500,
+    "six_zoom_out_clicks_width_ratio": 11.390625,
+    "zoom_in_reverses_zoom_out": true,
+    "drag_and_pointer_anchor": "pass",
+    "node_click_and_search": "pass",
+    "year_filter": "pass",
+    "basemap_toggle_and_preference_logic": "pass",
+    "desktop_resize": "pass",
+    "mobile_pinch_in_and_out": "pass",
+    "uncaught_script_errors": 0
+  }
+}

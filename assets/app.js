@@ -326,13 +326,152 @@
   function searchRegion(){const q=$('searchInput').value.trim().toLowerCase();if(!q)return;const match=state.map.regions.find(r=>`${r[2]} (${r[1]})`.toLowerCase()===q)||state.map.regions.find(r=>r[2].toLowerCase().includes(q)||r[1].toLowerCase()===q);if(!match)return;selectRegion(match[0]);setView([match[3]-135,match[4]-170,270,340]);}
   function updateScreenScaledSymbols(){
     if(!state.map)return;
-    const factor=Math.max(.07,state.view[2]/state.map.viewBox[2]);
+    const matrix=svg.getScreenCTM();
+    const factor=matrix?1/Math.max(1e-9,Math.hypot(matrix.a,matrix.b)):1;
     nodeLayer.querySelectorAll('.node').forEach(c=>{const base=Number(c.dataset.baseRadius||5);c.setAttribute('r',String(base*factor));});
     labelLayer.querySelectorAll('.node-label').forEach(t=>{const idx=Number(t.dataset.index),r=region(idx);if(!r)return;t.setAttribute('x',String(r[3]+10*factor));t.setAttribute('y',String(r[4]-8*factor));t.style.fontSize=`${12*factor}px`;t.style.strokeWidth=String(3.5*factor);});
   }
-  function setView(v){state.view=v;svg.setAttribute('viewBox',v.join(' '));updateScreenScaledSymbols();}
+  function setView(v) {
+    if (!Array.isArray(v) || v.length !== 4 || !v.every(Number.isFinite) || v[2] <= 0 || v[3] <= 0) return;
+    const [x,y,w,h] = v, box = svg.getBoundingClientRect();
+    const aspect = box.width > 0 && box.height > 0 ? box.width / box.height : w / h;
+    const width = Math.max(w, h * aspect), height = width / aspect;
+    state.view = [x+w/2-width/2,y+h/2-height/2,width,height];
+    svg.setAttribute('viewBox',state.view.join(' '));
+    updateScreenScaledSymbols();
+  }
   function fitMap(){setView(state.map.viewBox.slice());}
-  function bindPanZoom(){let dragging=false,start=null,startView=null;svg.addEventListener('pointerdown',ev=>{dragging=true;svg.setPointerCapture(ev.pointerId);start=[ev.clientX,ev.clientY];startView=state.view.slice();svg.classList.add('dragging');});svg.addEventListener('pointermove',ev=>{if(!dragging)return;const rect=svg.getBoundingClientRect(),dx=(ev.clientX-start[0])/rect.width*startView[2],dy=(ev.clientY-start[1])/rect.height*startView[3];setView([startView[0]-dx,startView[1]-dy,startView[2],startView[3]]);});const stop=()=>{dragging=false;svg.classList.remove('dragging');};svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop);svg.addEventListener('wheel',ev=>{ev.preventDefault();const rect=svg.getBoundingClientRect(),[vx,vy,vw,vh]=state.view,px=(ev.clientX-rect.left)/rect.width,py=(ev.clientY-rect.top)/rect.height,f=ev.deltaY>0?1.16:.86;const maxW=state.map.viewBox[2]*1.15,nw=Math.max(105,Math.min(maxW,vw*f)),nh=nw*(rect.height/rect.width),mx=vx+px*vw,my=vy+py*vh;setView([mx-px*nw,my-py*nh,nw,nh]);},{passive:false});}
+  function bindPanZoom() {
+    // Use SVG's actual screen transform, including preserveAspectRatio letterboxing.
+    const pointers = new Map();
+    let last = null, moved = false, suppressClickUntil = 0;
+    let lastSize = null;
+    const maxWidth = () => window.__ATLAS_MERCATOR__?.worldWidth || state.map.viewBox[2] * 128;
+    const minWidth = () => state.map.viewBox[2] / 128;
+    function clientPoint(x, y) {
+      const matrix = svg.getScreenCTM();
+      return matrix ? new DOMPoint(x, y).matrixTransform(matrix.inverse()) : null;
+    }
+    function zoomAt(factor, x, y) {
+      const anchor = clientPoint(x, y);
+      if (!anchor) return;
+      const [vx, vy, vw, vh] = state.view;
+      const nextWidth = Math.max(minWidth(), Math.min(maxWidth(), vw * factor));
+      const f = nextWidth / vw;
+      setView([anchor.x + (vx - anchor.x) * f, anchor.y + (vy - anchor.y) * f, nextWidth, vh * f]);
+    }
+    function panPixels(dx, dy) {
+      const matrix = svg.getScreenCTM();
+      if (!matrix) return;
+      const inv = matrix.inverse(), a = new DOMPoint(0, 0).matrixTransform(inv);
+      const b = new DOMPoint(dx, dy).matrixTransform(inv);
+      const [x, y, w, h] = state.view;
+      setView([x - (b.x - a.x), y - (b.y - a.y), w, h]);
+    }
+    function centreZoom(factor) {
+      const box = svg.getBoundingClientRect();
+      zoomAt(factor, box.left + box.width / 2, box.top + box.height / 2);
+    }
+    function gesture() {
+      const p = [...pointers.values()].slice(0, 2);
+      return p.length === 2
+        ? {x:(p[0].x+p[1].x)/2, y:(p[0].y+p[1].y)/2, distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y), count:2}
+        : p.length ? {...p[0], distance:0, count:1} : null;
+    }
+    svg.style.touchAction = 'none';
+    svg.setAttribute('tabindex', '0');
+    svg.addEventListener('pointerdown', event => {
+      if (event.pointerType === 'mouse' && event.button !== 0) return;
+      if (!pointers.size) { moved = false; suppressClickUntil = 0; }
+      pointers.set(event.pointerId, {x:event.clientX, y:event.clientY});
+      last = gesture();
+      if (pointers.size > 1) moved = true;
+      // Delay pointer capture until dragging: a simple click must still reach the node.
+      svg.focus({preventScroll:true});
+    });
+    window.addEventListener('pointermove', event => {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.set(event.pointerId, {x:event.clientX, y:event.clientY});
+      const next = gesture();
+      if (!last || next.count !== last.count) { last = next; return; }
+      const dx = next.x - last.x, dy = next.y - last.y;
+      if (!moved && Math.hypot(dx, dy) < 4) return;
+      moved = true;
+      svg.classList.add('dragging');
+      if (!svg.hasPointerCapture(event.pointerId)) {
+        try { svg.setPointerCapture(event.pointerId); } catch (_) {}
+      }
+      if (next.count === 2 && next.distance > 0 && last.distance > 0) {
+        zoomAt(last.distance / next.distance, last.x, last.y);
+      }
+      panPixels(dx, dy);
+      last = next;
+      if (event.cancelable) event.preventDefault();
+    }, {passive:false});
+    const stop = event => {
+      if (!pointers.has(event.pointerId)) return;
+      pointers.delete(event.pointerId);
+      if (svg.hasPointerCapture(event.pointerId)) svg.releasePointerCapture(event.pointerId);
+      if (moved) suppressClickUntil = performance.now() + 400;
+      last = gesture();
+      if (!pointers.size) svg.classList.remove('dragging');
+    };
+    window.addEventListener('pointerup', stop);
+    window.addEventListener('pointercancel', stop);
+    svg.addEventListener('lostpointercapture', stop);
+    window.addEventListener('blur', () => { pointers.clear(); last = null; svg.classList.remove('dragging'); });
+    svg.addEventListener('click', event => {
+      if (performance.now() < suppressClickUntil) { event.preventDefault(); event.stopImmediatePropagation(); }
+    }, true);
+    svg.addEventListener('wheel', event => {
+      event.preventDefault();
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? svg.clientHeight : 1;
+      const delta = Math.max(-600, Math.min(600, event.deltaY * unit));
+      zoomAt(Math.exp(delta * 0.0015), event.clientX, event.clientY);
+    }, {passive:false});
+    svg.addEventListener('keydown', event => {
+      if (event.target !== svg) return;
+      const actions = {
+        '+':()=>centreZoom(1/1.5), '=':()=>centreZoom(1/1.5), '-':()=>centreZoom(1.5),
+        '0':()=>setView(state.map.viewBox.slice()), 'Home':()=>setView(state.map.viewBox.slice()),
+        'ArrowLeft':()=>panPixels(70,0), 'ArrowRight':()=>panPixels(-70,0),
+        'ArrowUp':()=>panPixels(0,70), 'ArrowDown':()=>panPixels(0,-70),
+      };
+      if (actions[event.key]) { event.preventDefault(); actions[event.key](); }
+    });
+    const controls = document.createElement('div');
+    controls.setAttribute('role', 'group'); controls.setAttribute('aria-label', 'Map navigation');
+    controls.className = 'atlas-navigation';
+    controls.style.cssText = 'position:absolute;right:14px;top:85px;z-index:8;display:flex;flex-direction:column;gap:4px';
+    for (const [id, text, title, action] of [
+      ['atlas-zoom-in','+','Zoom in',()=>centreZoom(1/1.5)],
+      ['atlas-zoom-out','−','Zoom out',()=>centreZoom(1.5)],
+      ['atlas-fit-map','Fit','Fit study area',()=>setView(state.map.viewBox.slice())],
+    ]) {
+      const button = document.createElement('button');
+      button.id = id; button.type = 'button'; button.textContent = text; button.title = title;
+      button.setAttribute('aria-label', title);
+      button.style.cssText = 'min-width:36px;min-height:36px;border:1px solid #bac4ce;border-radius:6px;background:#fff;color:#344054;font:600 16px/1 Arial,sans-serif;cursor:pointer;box-shadow:0 1px 5px #0002';
+      button.addEventListener('click', action); controls.appendChild(button);
+    }
+    svg.parentElement.appendChild(controls);
+    // Keep the geographic centre and screen scale when resizing the browser.
+    const resized = () => {
+      const box = svg.getBoundingClientRect();
+      if (!box.width || !box.height) return;
+      if (lastSize) {
+        const [x,y,w,h] = state.view;
+        const units = Math.max(w / lastSize[0], h / lastSize[1]);
+        const nw = units * box.width, nh = units * box.height;
+        setView([x+w/2-nw/2,y+h/2-nh/2,nw,nh]);
+      }
+      lastSize = [box.width,box.height];
+    };
+    if (window.ResizeObserver) new ResizeObserver(resized).observe(svg);
+    else window.addEventListener('resize', resized);
+    resized();
+    window.__ATLAS_NAVIGATION__ = {zoomAt,panPixels,fit:()=>setView(state.map.viewBox.slice()),getView:()=>state.view.slice()};
+  }
 
   function bindControls(){
     $('yearSlider').addEventListener('input',e=>loadLayer(Number(e.target.value),state.ageGroup).catch(showError));$('prevYear').addEventListener('click',()=>loadLayer(Math.max(2012,state.year-1),state.ageGroup).catch(showError));$('nextYear').addEventListener('click',()=>loadLayer(Math.min(2025,state.year+1),state.ageGroup).catch(showError));$('playYear').addEventListener('click',togglePlay);
